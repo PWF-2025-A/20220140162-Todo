@@ -24,25 +24,15 @@
                     </div>
 
                     @if (session('success'))
-                        <p
-                            x-data="{ show: true }"
-                            x-show="show"
-                            x-transition
-                            x-init="setTimeout(() => show = false, 5000)"
-                            class="text-sm text-green-600 dark:text-green-400"
-                        >
+                        <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                           class="text-sm text-green-600 dark:text-green-400">
                             {{ session('success') }}
                         </p>
                     @endif
 
                     @if (session('danger'))
-                        <p
-                            x-data="{ show: true }"
-                            x-show="show"
-                            x-transition
-                            x-init="setTimeout(() => show = false, 5000)"
-                            class="text-sm text-red-600 dark:text-red-400"
-                        >
+                        <p x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 5000)"
+                           class="text-sm text-red-600 dark:text-red-400">
                             {{ session('danger') }}
                         </p>
                     @endif
@@ -54,6 +44,7 @@
                     <thead class="text-sm text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">Title</th>
+                            <th scope="col" class="px-6 py-3">Category</th>
                             <th scope="col" class="px-6 py-3">Status</th>
                             <th scope="col" class="px-6 py-3">Action</th>
                         </tr>
@@ -65,6 +56,9 @@
                                     <a href="{{ route('todo.edit', $todo) }}" class="hover:underline text-xs">
                                         {{ $todo->title }}
                                     </a>
+                                </td>
+                                <td class="px-6 py-4 text-sm">
+                                    {{ $todo->category?->title ?? '-' }}
                                 </td>
                                 <td class="px-6 py-4 md:block">
                                     @if (!$todo->is_done)
@@ -108,7 +102,7 @@
                             </tr>
                         @empty
                             <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                                <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                                <td colspan="4" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
                                     No data available
                                 </td>
                             </tr>
@@ -116,20 +110,18 @@
                     </tbody>
                 </table>
             </div>
-            </div>
 
-                @if ($todosCompleted > 1)
-                    <div class="p-6 text-xl text-gray-900 dark:text-gray-100">
-                        <form action="{{ route('todo.deleteallcompleted') }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <x-primary-button>
-                                Delete All Completed Task
-                            </x-primary-button>
-                        </form>
-                    </div>
-                @endif
-            </div>
+            @if ($todosCompleted > 1)
+                <div class="p-6 text-xl text-gray-900 dark:text-gray-100">
+                    <form action="{{ route('todo.deleteallcompleted') }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <x-primary-button>
+                            Delete All Completed Task
+                        </x-primary-button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
