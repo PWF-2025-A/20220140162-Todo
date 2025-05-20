@@ -12,12 +12,12 @@ class TodoController extends Controller
     public function index()
     {
         // Load relasi category agar bisa langsung dipakai di blade
-        $todos = Todo::with('category')
+        $todos = Todo::with('category')->where('user_id', Auth::id())
             ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
-        $todosCompleted = Todo::where('user_id', Auth::id())
+        $todosCompleted = Todo::with('category')->where('user_id', auth()->user()->id)
             ->where('is_done', true)
             ->count();
 

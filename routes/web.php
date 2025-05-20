@@ -59,6 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/categories/{categories}', [CategoryController::class, 'update'])->name('category.update');
 
     Route::resource('category', CategoryController::class)->except(['show']);
+
     
     
 });
