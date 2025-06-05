@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
-class User extends Authenticatable implements MustVerifyEmail
+use Tymon\JWTAuth\Contracts\JWTSubject;
+class User extends Authenticatable implements MustVerifyEmail, JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -23,7 +23,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
     ];
 
-    public function todo() {
+    /**
+     * Get the todos for the user.
+     */
+    public function todos()
+    {
         return $this->hasMany(Todo::class);
     }
 
@@ -37,7 +41,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
-
     /**
      * The attributes that should be cast.
      *
@@ -47,12 +50,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-    
+      public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
 
-    public function todos()
-{
-    return $this->hasMany(Todo::class);
+    public function getJWTCustomClaims()
+    {
+        return [
+            'isAdmins' => $this->is_admin,
+        ];
+    }
 }
-}
-
-
